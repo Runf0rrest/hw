@@ -1,18 +1,33 @@
-#include "../Stats/PhysicalDefense.h"
-#include "../Stats/MagiclaDegese.h"
+#ifndef UNIT_H
+#define UNIT_H
+
+#include <iostream>
+#include "UnitExceptions.h"
+
+class UnitIsDead {};
 
 class Unit {
-    protected:
-        LimitedFields<int>* hitPoitns;
-        PhysicalDefense* physicalDef;
-        MagicalDefense* magicalDef;
-        
-        virtual void attack() = 0;           
-        virtual void reciveDamage() = 0;
-        
+    private:
+        int damage;
+        LimitedField hitPoints;
+        std::string name;
+        void ensureIsAlive();
     public:
-        Unit(int maxHitPoints, LimitedFields<int> hitPoitns, 
-            PhysicalDefense physicalDef, MagicalDefense magicalDef);
-        virtual ~Unit();
-        virtual Unit(const Unit& unit);
+        Unit(const std::string& name, int hp, int dmg);
+        ~Unit();
+
+        int getDamage() const;
+        int getHitPoints() const;
+        int getHitPointsLimit() const;
+        const std::string& getName() const;
+
+        void addHitPoints(int hp);
+        void takeDamage(int dmg);
+
+        void attack(Unit& enemy);
+        void counterAttack(Unit& enemy);
 };
+
+std::ostream& operator<<(std::ostream& out, const Unit& unit);
+
+#endif //UNIT_H
